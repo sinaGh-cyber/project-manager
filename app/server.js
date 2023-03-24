@@ -7,6 +7,7 @@ module.exports = class Application {
     this.configApplication();
     this.createServer(PORT);
     this.createRoutes();
+    this.errorHandler()
   }
 
   configApplication() {
