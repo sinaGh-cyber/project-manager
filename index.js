@@ -1,6 +1,7 @@
 // environment variables configuration
 const dotenv = require("dotenv");
 const path = require("path");
+
 dotenv.config()
 const NodeEnv = process.env.NODE_ENV;
 dotenv.config({

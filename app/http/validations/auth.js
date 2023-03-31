@@ -27,14 +27,17 @@ function registerValidator() {
       }),
     body('mobile')
       .isMobilePhone('fa-IR')
-      .withMessage('phone number is invalid.'). custom(async (mobile) => {
+      .withMessage('phone number is invalid.')
+      .custom(async (mobile) => {
         const user = await UserModel.findOne({ mobile });
         if (user) throw 'user with this mobile number already exist.';
         return true;
       }),
     body('password')
       .isLength({ min: 6, max: 16 })
-      .withMessage('password length should be ')
+      .withMessage(
+        'password length should be at last 6 and lest 16 characters.'
+      )
       .custom((value, ctx) => {
         if (!value) throw 'password is required';
         if (value !== ctx?.req?.body?.confirm_password)
@@ -44,6 +47,25 @@ function registerValidator() {
   ];
 }
 
+function loginValidator() {
+ return [body('username')
+    .notEmpty()
+    .withMessage('username is required')
+    .custom(async (username) => {
+      const usernameRegex = /^[a-z]+[a-z0-9\_\.]{2,}/gi;
+      if (usernameRegex.test(username)) {
+        return true;
+      }
+      throw 'invalid username';
+    }),
+    body('password')
+      .isLength({ min: 6, max: 16 })
+      .withMessage(
+        'password length should be at last 6 and lest 16 characters.'
+      )]
+}
+
 module.exports = {
   registerValidator,
+  loginValidator,
 };
