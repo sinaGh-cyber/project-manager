@@ -13,7 +13,7 @@ const checkLogin = async (req, res, next) => {
     const { username } = verifyJWTToken(token);
     const user = await UserModel.findOne({ username }, { password: 0 });
     if (!user) throw authError;
-    req.user = user;
+    req.user = user._doc;
     next();
   } catch (error) {
     next(error);

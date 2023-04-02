@@ -2,3 +2,16 @@
 Get http://localhost:3000/user/profile
 Content-Type: application/json
 Authorization: Bearer {{$dotenv token}}
+
+
+
+### edit user profile
+Post http://localhost:3000/user/profile
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "first_name": "",
+    "last_name": "",
+    "skills": ["programming", "express.js", "node.js", "nest.js", "nest.js2", "","  ","", "skill"]
+}
