@@ -4,8 +4,9 @@ class ProjectController {
   async createProject(req, res, next) {
     try {
       const owner = req.user._id;
-      const { title, text, image } = req.body;
-      const result = await ProjectModel.create({ title, text, owner, image });
+      const { title, text, image, tags } = req.body;
+      const result = await ProjectModel.create({ title, text, owner, image, tags});
+console.log(tags);
 
       if (!result) throw { status: 400, message: 'can not add new task.' };
       return res.status(201).json({
