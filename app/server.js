@@ -23,7 +23,7 @@ module.exports = class Application {
     const http = require('http');
     const server = http.createServer(this.#app);
     server.listen(PORT, () => {
-      console.log(`Server Run > On http://localHost:${PORT}`);
+      console.log(`Server Run On > http://localHost:${PORT}`);
     });
   }
 
