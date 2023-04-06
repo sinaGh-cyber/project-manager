@@ -8,19 +8,27 @@ class ProjectController {
       const result = await ProjectModel.create({ title, text, owner, image });
 
       if (!result) throw { status: 400, message: 'can not add new task.' };
-      return res
-        .status(201)
-        .json({
-          status: 201,
-          success: true,
-          message: 'task created successfully.',
-        });
+      return res.status(201).json({
+        status: 201,
+        success: true,
+        message: 'task created successfully.',
+      });
     } catch (error) {
       next(error);
     }
   }
 
-  getAllProjects() {}
+  async getAllProjects() {
+    try {
+      const owner = req.user._id;
+      const projects = await ProjectModel.find({ owner });
+      return res.status(201).json({
+        status: 201,
+        success: true,
+        projects
+      })
+    } catch (error) {}
+  }
 
   grtProjectById() {}
 
