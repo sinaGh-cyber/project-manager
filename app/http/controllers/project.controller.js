@@ -27,7 +27,10 @@ class ProjectController {
         success: true,
         projects
       })
-    } catch (error) {}
+    } catch (error) {
+
+      
+    }
   }
 
   grtProjectById() {}
