@@ -7,3 +7,23 @@ Content-Type: application/json
     "title": "uu",
     "text":"ggggiiiiiiiiiiiiiiiiiiiiiiggggggggggggg"
 }
+
+
+### get all projects
+GET  http://localhost:3000/project/list
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+
+
+### get  project by id
+get http://localhost:3000/project/642a2f422a98c49404a81d95
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+
+### remove project by id
+DELETE http://localhost:3000/project/remove/642a2f422a98c49404a81d95
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
