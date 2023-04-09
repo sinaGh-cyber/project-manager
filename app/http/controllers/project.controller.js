@@ -1,5 +1,6 @@
 const autoBind = require('auto-bind');
 const { ProjectModel } = require('../../models/project');
+const { createLinkForFile } = require('../../modules/functions');
 
 class ProjectController {
   constructor() {
@@ -32,6 +33,11 @@ class ProjectController {
     try {
       const owner = req.user._id;
       const projects = await ProjectModel.find({ owner });
+
+      for (const project of projects) {
+        project.image = createLinkForFile(project.image, req)
+      }
+
       return res.status(201).json({
         status: 201,
         success: true,
@@ -56,8 +62,8 @@ class ProjectController {
       const owner = req.user._id;
 
       const project = await this.#foundProject(projectID, owner);
-      console.log(project);
 
+      project.image = createLinkForFile(project.image, req)
       return res.status(200).json({
         status: 200,
         success: true,
@@ -90,6 +96,36 @@ class ProjectController {
     }
   }
 
+  async updateProjectImage(req, res, next) {
+    const image = req.body.image;
+    const owner = req.user._id;
+    const projectId = req.params.id;
+
+    await this.#foundProject(projectId, owner);
+
+    const updateResult = await ProjectModel.updateOne(
+      { _id: projectId },
+      { $set: { image } }
+    );
+
+    if (updateResult.modifiedCount == 0)
+      throw {
+        status: 400,
+        success: false,
+        message: 'can not modify project.',
+      };
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: 'project modified successfully.',
+    });
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getAllProjectOfTeam(req, res, next) {
     try {
     } catch (error) {
@@ -106,6 +142,35 @@ class ProjectController {
 
   async updateProject(req, res, next) {
     try {
+      const projectId = req.params.id;
+      const owner = req.user._id;
+
+      const project = await this.#foundProject(projectId, owner);
+
+      const newData = { ...req.body };
+      Object.entries(newData).forEach(([key, value]) => {
+        if (!['title', 'text', 'tags'].includes(key)) delete newData[key];
+        if (['', ' ', 0, null, undefined, NaN].includes(value))
+          delete newData[key];
+      });
+
+      const updateResult = await ProjectModel.updateOne(
+        { _id: projectId, owner },
+        { $set: newData }
+      );
+
+      if (updateResult.modifiedCount == 0)
+        throw {
+          status: 400,
+          success: false,
+          message: 'can not modify project.',
+        };
+
+      res.status(200).json({
+        status: 200,
+        success: true,
+        message: 'project modified successfully.',
+      });
     } catch (error) {
       next(error);
     }

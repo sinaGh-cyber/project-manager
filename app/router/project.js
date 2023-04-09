@@ -32,12 +32,22 @@ router.delete(
   expressValidatorMapper,
   ProjectController.removeProject
 );
-router.post(
+router.put(
   '/edit/:id',
   checkLogin,
+  createProjectValidator(),
   mongoIdValidator(),
   expressValidatorMapper,
   ProjectController.updateProject
+);
+router.put(
+  '/edit-projectImage/:id',
+  fileUpload(),
+  checkLogin,
+uploadFile,
+  mongoIdValidator(),
+  expressValidatorMapper,
+  ProjectController.updateProjectImage
 );
 
 module.exports = {
